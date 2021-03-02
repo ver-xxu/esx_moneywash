@@ -1,3 +1,3 @@
 **Depedencies**: ESX
 
-Code written with phone.
+Code written on phone.
