@@ -20,7 +20,7 @@ CreateThread(function()
             -- TODO 3D text func
             Draw3DText(WashPos, "E - Pese rahaa", 0.4)
             if IsControlJustPressed(0, 38) then
-                TriggerServerEvent("money_wash:start", WashPos)
+                TriggerServerEvent("money_wash:start")
             end
         end
         Wait(wait)
