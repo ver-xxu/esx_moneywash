@@ -23,3 +23,8 @@ end)
 StartWash = function(xPlayer)  
 
 end
+RegisterServerEvent("money_wash:getpos")
+AddEventHandler("money_wash:getpos", function()
+     local _source = source
+     TriggerClientEvent("money_wash:position", _source, WashPos)   
+end)
