@@ -5,13 +5,13 @@ Citizen.CreateThread(function()
 		TriggerEvent("esx:getSharedObject", function(asddsf) ESX = asddsf end)
         Wait(0)
     end
-    TriggerServerEvent("wash_money:getpos")
+    TriggerServerEvent("money_wash:getpos")
 end)
 
 local wash = false
-local WashPos = vector3(6282.924492, 37374.3855, 7264.263)
+local WashPos = vector3(0.0, 0.0, -1110.0)
  
-CreateThread(function()
+Citizen.CreateThread(function()
     while true do 
         local wait = 500
         local PlayerPed = PlayerPedId()
