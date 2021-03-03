@@ -1,67 +1,54 @@
 ESX = nil
 
-Citizen.CreateThread(function()
-    while ESX == nil do
-		TriggerEvent("esx:getSharedObject", function(asddsf) ESX = asddsf end)
-        Wait(0)
+TriggerEvent("esx:getSharedObject", function(asfsas) ESX = asfsas end)
+
+local Washers = {}
+
+local WashPos = vector3(-285.11,281.65,89.89)
+-- Real position here ^^
+
+RegisterServerEvent("money_wash:start")
+AddEventHandler("money_wash:start", function()
+     local _source = source
+     local xPlayer = ESX.GetPlayerFromId(_source)
+     local coords = xPlayer.getCoords(true)
+     local distance = #(coords - WashPos)
+     if distance < 8 then
+        if not Washers[_source] then
+            Washers[_source] = true
+            StartWash(_source)
+        end
+    else
+        print(string.format("%s is trying to wash %s units away from the real spot", xPlayer.name, distance))
     end
-    TriggerServerEvent("money_wash:getpos")
 end)
 
-local wash = false
-local WashPos = vector3(0.0, 0.0, -1110.0)
- 
-Citizen.CreateThread(function()
-    while true do 
-        local wait = 500
-        local PlayerPed = PlayerPedId()
-        local PlayerCoords = GetEntityCoords(PlayerPedId())
-        if #(PlayerCoords - WashPos) < 3 then
-            wait = 5
-            if not wash then
-                Draw3DText(WashPos, "E - Pese rahaa", 0.4)
-                if IsControlJustPressed(0, 38) then
-                    TaskStartScenarioInPlace(PlayerPed, "PROP_HUMAN_BUM_BIN", 0, true)
-                    wash = true
-                    TriggerServerEvent("money_wash:start")
-                end
+StartWash = function(source)  
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local money = xPlayer.getAccount("black_money").money
+    if Washers[source] then
+        SetTimeout(2500, function()
+            if money >= 500 then
+                xPlayer.addMoney(500)
+                xPlayer.removeAccountMoney("black_money", 500)
+                StartWash(source)
             else
-                Draw3DText(WashPos, "X - Lopeta pesu", 0.4)
-                if IsControlJustPressed(0, 73) then
-                    ClearPedTasks(PlayerPed)
-                    wash = false
-                    TriggerServerEvent("money_wash:stopwash")
-                end
-			end
-		else
-		    if wash then
-			ClearPedTasks(PlayerPed)
-			wash = false
-			TriggerServerEvent("money_wash:stopwash")
-		    end
-		end
-        Wait(wait)
+                xPlayer.showNotification("Sinulla ei ole tarpeeksi likaista rahaa!")
+            end
+    	end)
     end
+end
+
+RegisterServerEvent("money_wash:getpos")
+AddEventHandler("money_wash:getpos", function()
+    local _source = source
+    TriggerClientEvent("money_wash:position", _source, WashPos)   
 end)
 
-RegisterNetEvent("money_wash:position")
-AddEventHandler("money_wash:position", function(newpos)
-    WashPos = newpos
+RegisterServerEvent("money_wash:stopwash")
+AddEventHandler("money_wash:stopwash", function()
+    local _source = source
+    Washers[_source] = nil
 end)
-    
-function Draw3DText(coords, text, scale)
-    local onScreen, x, y = World3dToScreen2d(coords.x, coords.y, coords.z)
-    SetTextScale(scale, scale)
-    SetTextOutline()
-    SetTextDropShadow()
-    SetTextDropshadow(2, 0, 0, 0, 255)
-    SetTextFont(4)
-    SetTextProportional(1)
-    SetTextEntry('STRING')
-    SetTextCentre(1)
-    SetTextColour(255, 255, 255, 215)
-    AddTextComponentString(text)
-    DrawText(x, y)
-    local factor = (string.len(text)) / 400
-    DrawRect(x, y+0.012, 0.015+ factor, 0.03, 0, 0, 0, 68)
-end 
+
+
