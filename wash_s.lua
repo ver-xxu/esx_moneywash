@@ -30,10 +30,10 @@ StartWash = function(xPlayer)
             if money >= 500 then
                 xPlayer.addMoney(500)
                 xPlayer.removeAccountMoney("black_money", 500)
-				StartWash(xPlayer)
+		StartWash(xPlayer)
             end
-		end)
-	end
+    	end)
+    end
 end
 
 RegisterServerEvent("money_wash:getpos")
