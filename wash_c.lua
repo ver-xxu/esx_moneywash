@@ -2,37 +2,44 @@ ESX = nil
 
 Citizen.CreateThread(function()
     while ESX == nil do
-         Wait(5)
-         TriggerEvent("esx:getSharedObject", function(asddsf) ESX = asddsf end)
+		TriggerEvent("esx:getSharedObject", function(asddsf) ESX = asddsf end)
+        Wait(0)
     end
     TriggerServerEvent("wash_money:getpos")
 end)
+
 local wash = false
 local WashPos = vector3(6282.924492, 37374.3855, 7264.263)
  
 CreateThread(function()
-     while true do 
+    while true do 
         local wait = 500
         local PlayerPed = PlayerPedId()
         local PlayerCoords = GetEntityCoords(PlayerPedId())
         if #(PlayerCoords - WashPos) < 3 then
             wait = 5
-            -- TODO 3D text func
             if not pesu then
-            Draw3DText(WashPos, "E - Pese rahaa", 0.4)
-            if IsControlJustPressed(0, 38) then
-                TaskStartScenarioInPlace(PlayerPed, "PROP_HUMAN_BUM_BIN", 0, true)
-                pesu = true
-                TriggerServerEvent("money_wash:start")
-            end
+                Draw3DText(WashPos, "E - Pese rahaa", 0.4)
+                if IsControlJustPressed(0, 38) then
+                    TaskStartScenarioInPlace(PlayerPed, "PROP_HUMAN_BUM_BIN", 0, true)
+                    pesu = true
+                    TriggerServerEvent("money_wash:start")
+                end
             else
-            Draw3DText(WashPos, "X - Lopeta pesu", 0.4)
-            if IsControlJustPressed(0, 73) then
-                ClearPedTasks(PlayerPed)
-                pesu = false
-                TriggerServerEvent("money_wash:stopwash")
-            end
-        end
+                Draw3DText(WashPos, "X - Lopeta pesu", 0.4)
+                if IsControlJustPressed(0, 73) then
+                    ClearPedTasks(PlayerPed)
+                    pesu = false
+                    TriggerServerEvent("money_wash:stopwash")
+                end
+			end
+		else
+			if pesu then
+				ClearPedTasks(PlayerPed)
+				pesu = false
+				TriggerServerEvent("money_wash:stopwash")
+			end
+		end
         Wait(wait)
     end
 end)
@@ -57,4 +64,4 @@ function Draw3DText(coords, text, scale)
     DrawText(x, y)
     local factor = (string.len(text)) / 400
     DrawRect(x, y+0.012, 0.015+ factor, 0.03, 0, 0, 0, 68)
-end    
+end 
