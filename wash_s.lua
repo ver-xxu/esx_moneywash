@@ -21,10 +21,25 @@ AddEventHandler("money_wash:start", function()
 end)
 
 StartWash = function(xPlayer)  
-
+     local money = xPlayer.getAccount("black_money").money
+     if Washers[xPlayer.source] then
+     SetTimeout(2500, function()
+         if money >= 500 then
+            xPlayer.addMoney(500)
+            xPlayer.removeAccountMoney("black_money", 500)
+            StartWash(xPlayer)
+         end
+     end)
 end
+
 RegisterServerEvent("money_wash:getpos")
 AddEventHandler("money_wash:getpos", function()
      local _source = source
      TriggerClientEvent("money_wash:position", _source, WashPos)   
+end)
+
+RegisterServerEvent("money_wash:stopwash")
+AddEventHandler("money_wash:stopwash", function()
+     local _source = source
+     Washers[_source] = nil
 end)
