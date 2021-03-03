@@ -18,27 +18,27 @@ CreateThread(function()
         local PlayerCoords = GetEntityCoords(PlayerPedId())
         if #(PlayerCoords - WashPos) < 3 then
             wait = 5
-            if not pesu then
+            if not wash then
                 Draw3DText(WashPos, "E - Pese rahaa", 0.4)
                 if IsControlJustPressed(0, 38) then
                     TaskStartScenarioInPlace(PlayerPed, "PROP_HUMAN_BUM_BIN", 0, true)
-                    pesu = true
+                    wash = true
                     TriggerServerEvent("money_wash:start")
                 end
             else
                 Draw3DText(WashPos, "X - Lopeta pesu", 0.4)
                 if IsControlJustPressed(0, 73) then
                     ClearPedTasks(PlayerPed)
-                    pesu = false
+                    wash = false
                     TriggerServerEvent("money_wash:stopwash")
                 end
 			end
 		else
-			if pesu then
-				ClearPedTasks(PlayerPed)
-				pesu = false
-				TriggerServerEvent("money_wash:stopwash")
-			end
+		    if wash then
+			ClearPedTasks(PlayerPed)
+			wash = false
+			TriggerServerEvent("money_wash:stopwash")
+		    end
 		end
         Wait(wait)
     end
