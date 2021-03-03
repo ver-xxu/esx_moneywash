@@ -11,7 +11,7 @@ local wash = false
 local WashPos = vector3(6282.924492, 37374.3855, 7264.263)
  
 CreateThread(function()
-    while true do 
+     while true do 
         local wait = 500
         local PlayerPed = PlayerPedId()
         local PlayerCoords = GetEntityCoords(PlayerPedId())
@@ -41,3 +41,20 @@ RegisterNetEvent("money_wash:position")
 AddEventHandler("money_wash:position", function(newpos)
     WashPos = newpos
 end)
+    
+function Draw3DText(coords, text, scale)
+    local onScreen, x, y = World3dToScreen2d(coords.x, coords.y, coords.z)
+    SetTextScale(scale, scale)
+    SetTextOutline()
+    SetTextDropShadow()
+    SetTextDropshadow(2, 0, 0, 0, 255)
+    SetTextFont(4)
+    SetTextProportional(1)
+    SetTextEntry('STRING')
+    SetTextCentre(1)
+    SetTextColour(255, 255, 255, 215)
+    AddTextComponentString(text)
+    DrawText(x, y)
+    local factor = (string.len(text)) / 400
+    DrawRect(x, y+0.012, 0.015+ factor, 0.03, 0, 0, 0, 68)
+end    
