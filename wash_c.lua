@@ -19,14 +19,14 @@ Citizen.CreateThread(function()
         if #(PlayerCoords - WashPos) < 3 then
             wait = 5
             if not wash then
-                Draw3DText(WashPos, "E - Pese rahaa", 0.35)
+                Draw3DText(WashPos, "E - Wash money", 0.35)
                 if IsControlJustPressed(0, 38) then
                     TaskStartScenarioInPlace(PlayerPed, "PROP_HUMAN_BUM_BIN", 0, true)
                     wash = true
                     TriggerServerEvent("money_wash:start")
                 end
             else
-                Draw3DText(WashPos, "X - Lopeta pesu", 0.35)
+                Draw3DText(WashPos, "X - Stop washing", 0.35)
                 if IsControlJustPressed(0, 73) then
                     ClearPedTasks(PlayerPed)
                     wash = false
