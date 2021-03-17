@@ -2,4 +2,4 @@
 
 Code written on phone.
 
-Put position in wash_s.lua on row **5**
+Put position in wash_s.lua on row **7**
