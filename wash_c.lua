@@ -32,7 +32,7 @@ Citizen.CreateThread(function()
                     wash = false
                     TriggerServerEvent("money_wash:stopwash")
                 end
-			end
+	        end
 		else
 		    if wash then
 			ClearPedTasks(PlayerPed)
