@@ -5,13 +5,19 @@ Citizen.CreateThread(function()
 		TriggerEvent("esx:getSharedObject", function(asddsf) ESX = asddsf end)
         Wait(0)
     end
-    TriggerServerEvent("money_wash:getpos")
 end)
 
 local wash = false
-local WashPos = vector3(0.0, 0.0, -1110.0)
+
  
-Citizen.CreateThread(function()
+CreateThread(function()
+    local WashPos = vector3(0.0, 0.0, -1110.0)
+    while ( ESX == nil ) do
+	Wait(0)
+    end
+    ESX.TriggerServerCallback("money_wash:getpos",function(pos)
+		WashPos = pos		
+    end)
     while true do 
         local wait = 500
         local PlayerPed = PlayerPedId()
@@ -43,12 +49,7 @@ Citizen.CreateThread(function()
         Wait(wait)
     end
 end)
-
-RegisterNetEvent("money_wash:position")
-AddEventHandler("money_wash:position", function(newpos)
-    WashPos = newpos
-end)
-    
+  
 function Draw3DText(coords, text, scale)
     local onScreen, x, y = World3dToScreen2d(coords.x, coords.y, coords.z)
     SetTextScale(scale, scale)
