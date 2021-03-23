@@ -3,6 +3,7 @@
 TriggerEvent("esx:getSharedObject", function(asfsas) ESX = asfsas end)
 
 local Washers = {}
+local called = {}
 
 local WashPos = vector3(0.0, 0.0, 0.0)
 -- Real position here ^^
@@ -36,11 +37,15 @@ StartWash = function(xPlayer)
     end
 end
 
-RegisterServerEvent("money_wash:getpos")
-AddEventHandler("money_wash:getpos", function()
-    local _source = source
-    TriggerClientEvent("money_wash:position", _source, WashPos)   
+ESX.RegisterServerCallback("money_wash:getpos",function(source, cb)
+        local _source = source
+        if not called[_source] then
+		cb(WashPos)
+        else
+	         cb(nil)
+        end 
 end)
+
 
 RegisterServerEvent("money_wash:stopwash")
 AddEventHandler("money_wash:stopwash", function()
