@@ -41,6 +41,7 @@ ESX.RegisterServerCallback("money_wash:getpos",function(source, cb)
         local _source = source
         if not called[_source] then
 		cb(WashPos)
+		called[_source] = true
         else
 	         cb(nil)
         end 
