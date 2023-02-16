@@ -21,10 +21,10 @@ AddEventHandler("money_wash:start", function(k)
             if not Washers[_source] then
                 Washers[_source] = true
                 StartWash(xPlayer, _source)
-                TriggerClientEvent('esx:showNotification', _source, 'Aloitit rahanpesun!')
+                TriggerClientEvent('esx:showNotification', _source, 'You started washing money!')
                 TriggerClientEvent("money_wash:enabled", _source)
             else
-                TriggerClientEvent('esx:showNotification', _source, 'Peset jo rahaa!')
+                TriggerClientEvent('esx:showNotification', _source, 'You are already washing money!')
             end
         else
             print(string.format("%s is trying to wash %s units away from the real spot", xPlayer.name, distance))
@@ -38,10 +38,10 @@ StartWash = function(xPlayer, source)
             if money >= 500 then
                 xPlayer.addMoney(500)
                 xPlayer.removeAccountMoney("black_money", 500)
-                TriggerClientEvent('esx:showNotification', source, 'Pesit $500')
+                TriggerClientEvent('esx:showNotification', source, 'You washed $500.')
 		        StartWash(xPlayer, source)
             else
-                TriggerClientEvent('esx:showNotification', source, 'Sinulla ei ole likaista rahaa!')
+                TriggerClientEvent('esx:showNotification', source, 'You dont have dirty money!')
                 Washers[source] = nil
                 TriggerClientEvent("money_wash:disabled", source)
             end
