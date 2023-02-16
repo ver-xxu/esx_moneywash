@@ -28,13 +28,13 @@ CreateThread(function()
                 local nytpos = v.pos
                 wait = 0
                 if not wash then
-                    Draw3DText(v.pos, "E - Pese rahaa", 0.35)
+                    Draw3DText(v.pos, "E - Wash money", 0.35)
                     if IsControlJustPressed(0, 38) then
                         TaskStartScenarioInPlace(PlayerPed, "PROP_HUMAN_BUM_BIN", 0, true)
                         TriggerServerEvent("money_wash:start", k)
                     end
                 else
-                    Draw3DText(v.pos, "X - Lopeta pesu", 0.35)
+                    Draw3DText(v.pos, "X - Stop washing", 0.35)
                     if IsControlJustPressed(0, 73) then
 
                         ClearPedTasks(PlayerPed)
