@@ -7,13 +7,14 @@ Citizen.CreateThread(function()
     end
 end)
 
-local wash = false
 
+local wash = false
  
 CreateThread(function()
-    local WashPos = vector3(0.0, 0.0, -1110.0)
+
+    local WashPos = {}
     while ( ESX == nil ) do
-	Wait(0)
+	   Wait(0)
     end
     ESX.TriggerServerCallback("money_wash:getpos",function(pos)
 		WashPos = pos		
@@ -22,33 +23,49 @@ CreateThread(function()
         local wait = 500
         local PlayerPed = PlayerPedId()
         local PlayerCoords = GetEntityCoords(PlayerPedId())
-        if #(PlayerCoords - WashPos) < 3 then
-            wait = 5
-            if not wash then
-                Draw3DText(WashPos, "E - Wash money", 0.35)
-                if IsControlJustPressed(0, 38) then
-                    TaskStartScenarioInPlace(PlayerPed, "PROP_HUMAN_BUM_BIN", 0, true)
-                    wash = true
-                    TriggerServerEvent("money_wash:start")
+        for k,v in pairs(WashPos) do
+            if #(PlayerCoords - v.pos) < 3 then
+                local nytpos = v.pos
+                wait = 0
+                if not wash then
+                    Draw3DText(v.pos, "E - Pese rahaa", 0.35)
+                    if IsControlJustPressed(0, 38) then
+                        TaskStartScenarioInPlace(PlayerPed, "PROP_HUMAN_BUM_BIN", 0, true)
+                        TriggerServerEvent("money_wash:start", k)
+                    end
+                else
+                    Draw3DText(v.pos, "X - Lopeta pesu", 0.35)
+                    if IsControlJustPressed(0, 73) then
+
+                        ClearPedTasks(PlayerPed)
+                        ESX.ShowNotification("Lopetit pesun")
+                        TriggerServerEvent("money_wash:stopwash")
+                    end
                 end
-            else
-                Draw3DText(WashPos, "X - Stop washing", 0.35)
-                if IsControlJustPressed(0, 73) then
-                    ClearPedTasks(PlayerPed)
-                    wash = false
-                    TriggerServerEvent("money_wash:stopwash")
+                if wash then
+                    print(nytpos)
+                    if #(PlayerCoords - nytpos) > 3 then
+                        ClearPedTasks(PlayerPed)
+                        ESX.ShowNotification("Olet liian kaukana")
+                        TriggerServerEvent("money_wash:stopwash")
+                    end
                 end
-	    end
-		else
-		    if wash then
-			ClearPedTasks(PlayerPed)
-			wash = false
-			TriggerServerEvent("money_wash:stopwash")
-		    end
+            end
 		end
         Wait(wait)
     end
 end)
+
+RegisterNetEvent("money_wash:enabled")
+AddEventHandler("money_wash:enabled",function()
+    wash = true
+end)
+RegisterNetEvent("money_wash:disabled")
+AddEventHandler("money_wash:disabled",function()
+    wash = false
+    ClearPedTasks(PlayerPedId())
+end)
+
   
 function Draw3DText(coords, text, scale)
     local onScreen, x, y = World3dToScreen2d(coords.x, coords.y, coords.z)
