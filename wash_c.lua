@@ -46,7 +46,7 @@ CreateThread(function()
                     print(nytpos)
                     if #(PlayerCoords - nytpos) > 3 then
                         ClearPedTasks(PlayerPed)
-                        ESX.ShowNotification("Olet liian kaukana")
+                        ESX.ShowNotification("You are too far.")
                         TriggerServerEvent("money_wash:stopwash")
                     end
                 end
